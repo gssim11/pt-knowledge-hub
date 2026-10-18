@@ -1,0 +1,28 @@
+name: Daily Autonomous Academic Briefing Generator
+on:
+  schedule:
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  generate-daily-briefings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Generate Daily Reports via PubMed and Gemini API
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python3 scripts/auto_generate_daily.py
+      - name: Commit Pending Reports
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/ manifest.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(auto): add daily pending reports to approval queue"
+            git push
+          fi
