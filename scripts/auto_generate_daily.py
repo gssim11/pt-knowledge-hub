@@ -4,7 +4,7 @@
 신경물리치료·필라테스·뇌과학 무인 일일 학술 브리핑 생성 엔진 (인포그래픽 강화 버전)
 매일 아침 07:15 KST GitHub Actions에 의해 자동 실행됩니다.
 """
-import json, os, urllib.parse, urllib.request, re
+import json, os, urllib.parse, urllib.request, re, time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -42,6 +42,7 @@ STREAM_CONFIGS = [
 
 def fetch_pubmed(query, used_pmids):
     try:
+        time.sleep(1.5)  # NCBI Rate Limit (초당 3회 이하) 준수
         u1 = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?" + urllib.parse.urlencode({
             "db": "pubmed", "term": query, "retmode": "json", "retmax": "15", "sort": "date"
         })
@@ -54,6 +55,7 @@ def fetch_pubmed(query, used_pmids):
         if not pmid:
             return None
 
+        time.sleep(1.5)  # NCBI Fetch 요청 간격 유지
         u2 = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?" + urllib.parse.urlencode({
             "db": "pubmed", "id": pmid, "retmode": "xml"
         })
@@ -119,7 +121,8 @@ def call_gemini(cfg, paper):
 4. summary는 목록에 표시될 2~3줄의 핵심 요약문(일반 텍스트)을 작성하십시오.
 5. tags에는 ["#신경가소성", "#고유수용성감각", "#운동제어_운동학습", "#중추감작_통증기전", "#자율신경계", "#비침습뇌자극(tSMS)", "#거울시각피드백(MVF)", "#뇌파_운동심상(EEG-MI)", "#로봇_보행재활", "#코어_분절안정화", "#심폐재활_CPET", "#임상응급_프로토콜", "#RCT저널브리핑"] 중 2~4개를 선택하십시오."""
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+    # Google AI 공식 최신 고성능 모델: gemini-2.5-flash
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -169,7 +172,7 @@ def main():
                 continue
 
             used.add(paper["pmid"])
-            print(f"[{cfg['stream']}] Gemini 2.0 Flash 인포그래픽 브리핑 생성 중... (PMID: {paper['pmid']})")
+            print(f"[{cfg['stream']}] Gemini 2.5 Flash 인포그래픽 브리핑 생성 중... (PMID: {paper['pmid']})")
             out = call_gemini(cfg, paper)
 
             f_dir = root / "reports" / cfg["folder"]
@@ -189,6 +192,7 @@ def main():
             })
             generated_count += 1
             print(f"[{cfg['stream']}] 인포그래픽 브리핑 생성 완료 -> {rel}")
+            time.sleep(2)  # 스트림 간 안정적 딜레이
         except Exception as e:
             print(f"[{cfg['stream']}] 리포트 생성 중 예외 발생 (건너뜀): {e}")
 
