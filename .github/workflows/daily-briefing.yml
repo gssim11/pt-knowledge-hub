@@ -1,28 +1,40 @@
 name: Daily Autonomous Academic Briefing Generator
 on:
   schedule:
-    - cron: '0 22 * * *'
-  workflow_dispatch:
+    - cron: '15 22 * * *'  # 매일 22:15 UTC = 한국시간(KST) 매일 아침 07:15
+  workflow_dispatch:        # GitHub 웹에서 [Run workflow] 버튼으로 즉시 실행 가능
+
 permissions:
   contents: write
+
 jobs:
   generate-daily-briefings:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Generate Daily Reports via PubMed and Gemini API
+
+      - name: Generate Daily Briefings
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python3 scripts/auto_generate_daily.py
-      - name: Commit Pending Reports
+
+      - name: Commit and Push Updates
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin ${{ github.ref_name }} || true
           git add reports/ manifest.json
           if ! git diff --staged --quiet; then
-            git commit -m "chore(auto): add daily pending reports to approval queue"
-            git push
+            git commit -m "chore(briefing): publish daily academic reports [$(date +'%Y-%m-%d')]"
+            git push origin ${{ github.ref_name }}
+          else
+            echo "No changes to commit."
           fi
