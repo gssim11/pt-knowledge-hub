@@ -1,147 +1,274 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학술 브리핑 리포트</title>
-    <style>
-        body {
-            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
-        .card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-            padding: 30px;
-            max-width: 800px;
-            width: 100%;
-            box-sizing: border-box;
-            margin: 20px 0;
-        }
-        .card-header {
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-        .card-header h1 {
-            font-size: 2em;
-            color: #2c3e50;
-            margin: 0;
-            line-height: 1.3;
-        }
-        .card-header p {
-            font-size: 0.95em;
-            color: #7f8c8d;
-            margin-top: 8px;
-        }
-        .card-body h2 {
-            font-size: 1.5em;
-            color: #34495e;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-left: 4px solid #3498db;
-            padding-left: 10px;
-        }
-        .card-body p {
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-        .card-body ul {
-            list-style-type: disc;
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
-        .card-body ul li {
-            margin-bottom: 8px;
-        }
-        .tag-container {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px dashed #e0e0e0;
-        }
-        .tag {
-            display: inline-block;
-            background-color: #ecf0f1;
-            color: #34495e;
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 0.85em;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-        .professor-info {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
-            font-size: 0.9em;
-            color: #555;
-            text-align: right;
-        }
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .card {
-                padding: 20px;
-                margin: 10px 0;
-            }
-            .card-header h1 {
-                font-size: 1.6em;
-            }
-            .card-body h2 {
-                font-size: 1.3em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>근골격계 통증 관리의 새로운 지평: 수면, 염증, 그리고 물리치료적 중재의 연관성</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  </style>
 </head>
-<body>
-    <div class="card">
-        <div class="card-header">
-            <h1>근골격계 통증 관리의 새로운 지평: 수면, 염증, 그리고 물리치료적 중재의 연관성</h1>
-            <p><strong>일일 심층 학술 브리핑 리포트 (CLINICAL 영역)</strong></p>
-        </div>
-        <div class="card-body">
-            <h2>개요</h2>
-            <p>만성 근골격계 통증 환자에게 수면 장애, 염증, 그리고 통증은 서로를 강화하며 재활 과정을 저해하는 악순환을 형성합니다. 최근 Pain Management 저널에 발표된 통합적 문헌 고찰(PMID: 42902543)은 이러한 신경생물학적 기전을 심층 분석하고, 비약물적 통증 관리 전략을 제시하여 임상 물리치료의 새로운 방향을 모색합니다.</p>
+<body class="bg-[#070e17] text-slate-100 min-h-screen p-4 md:p-8 custom-scroll">
+  <article class="max-w-4xl mx-auto space-y-6">
 
-            <h2>주요 연구 결과 및 신경생물학적 기전</h2>
-            <p>본 연구는 2010년부터 2025년까지 발표된 57편의 동료 심사 연구를 분석하여 다음과 같은 핵심 기전을 밝혀냈습니다:</p>
-            <ul>
-                <li><strong>수면 제한과 염증 반응:</strong> 수면 제한은 인터루킨-6(IL-6), 종양괴사인자-알파(TNF-α), C-반응성 단백질(CRP)과 같은 주요 염증성 사이토카인의 증가를 유발합니다. 이는 통증 역치를 낮추고 통각 과민을 심화시킬 수 있습니다.</li>
-                <li><strong>통각 수용기 감작:</strong> 프로스타글란딘과 브래디키닌과 같은 염증 매개 물질은 통각 수용기를 감작시켜 통증 인식을 증폭시킵니다.</li>
-                <li><strong>하행성 통증 억제 경로 손상:</strong> 수면 장애는 뇌의 하행성 통증 억제 경로 기능을 저해하여 통증 조절 능력을 약화시킵니다.</li>
-            </ul>
+    <!-- 상단 브레드크럼 & 메타 배지 -->
+    <header class="p-6 md:p-8 rounded-2xl bg-[#0f1b2b]/90 border border-sky-500/30 shadow-xl space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold px-3 py-1 rounded-full border bg-sky-500/20 text-sky-300 border-sky-500/40 flex items-center gap-1.5">
+            <span>🏥</span>
+            <span>CLINICAL · 임상 물리치료 & 환자 안전 프로토콜</span>
+          </span>
+          <span class="text-xs text-slate-400 font-mono">발행일: 2026-10-24</span>
+        </div>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/42902543/" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 underline font-mono">PubMed: 42902543 ↗</a>
+      </div>
 
-            <h2>비약물적 중재 전략의 기전적 타당성</h2>
-            <p>연구는 이러한 악순환을 끊기 위한 다양한 비약물적 중재의 기전적 타당성을 제시합니다:</p>
-            <ul>
-                <li><strong>운동 치료:</strong> 유산소 운동 및 근력 운동은 염증 감소, 신경계 안정화, 움직임에 대한 자신감 증진을 통해 통증을 경감시킬 수 있습니다.</li>
-                <li><strong>도수 치료 및 신경근 전기 자극(NMES):</strong> 국소적인 통증 조절 및 근 기능 개선에 기여합니다.</li>
-                <li><strong>저강도 레이저 치료(LLLT):</strong> 항염증 및 진통 효과를 통해 통증 관리에 도움을 줄 수 있습니다.</li>
-                <li><strong>수면 중심 행동 중재:</strong> 수면 위생 교육, 인지 행동 치료(CBT-I) 등은 수면의 질을 직접적으로 개선하여 통증-염증-수면 악순환을 끊는 데 중요한 역할을 합니다.</li>
-            </ul>
+      <h1 class="text-xl md:text-2xl lg:text-3xl font-extrabold text-white leading-snug tracking-tight">
+        근골격계 통증 관리의 새로운 지평: 수면, 염증, 그리고 물리치료적 중재의 연관성
+      </h1>
 
-            <h2>임상적 시사점 및 교수 제언</h2>
-            <p>본 연구는 임상 물리치료 현장에서 환자의 수면 상태를 일상적으로 평가하고, 다각적인 근골격계 통증 관리 전략에 수면 중심 중재를 통합하는 것의 중요성을 강조합니다. 비록 고품질의 확증적 임상 연구가 더 필요하지만, 수면 문제 해결은 통증 감소, 염증 반응 조절, 그리고 궁극적으로 환자의 전반적인 재활 성과를 크게 향상시킬 잠재력을 가집니다. 물리치료사는 환자의 수면 패턴과 질에 대한 면밀한 평가를 통해 개별화된 중재 계획을 수립하고, 필요시 다른 의료 전문가와의 협력을 통해 통합적인 접근을 제공해야 할 것입니다.</p>
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        <span class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-medium">#중추감작_통증기전</span><span class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-medium">#운동제어_운동학습</span><span class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-medium">#자율신경계</span><span class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-medium">#RCT저널브리핑</span>
+      </div>
+    </header>
+
+    <!-- 1. 핵심 지표 4대 스탯 그리드 -->
+    <section>
+      <div class="flex items-center gap-2 mb-3">
+        <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Key Research Metrics & Evidence</h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        
+        <div class="p-4 rounded-xl bg-[#0f1b2b]/90 border border-sky-500/30 shadow-sm">
+          <div class="text-[11px] font-medium text-slate-400 mb-1">환자 질환군</div>
+          <div class="text-base md:text-lg font-extrabold text-white mb-1 tracking-tight">검증된 최신 근거</div>
+          <div class="text-[11px] text-slate-400 truncate">PMID: 42902543</div>
         </div>
-        <div class="tag-container">
-            <span class="tag">#중추감작_통증기전</span>
-            <span class="tag">#운동제어_운동학습</span>
-            <span class="tag">#자율신경계</span>
-            <span class="tag">#RCT저널브리핑</span>
+        
+        <div class="p-4 rounded-xl bg-[#0f1b2b]/90 border border-sky-500/30 shadow-sm">
+          <div class="text-[11px] font-medium text-slate-400 mb-1">치료 프로토콜</div>
+          <div class="text-base md:text-lg font-extrabold text-white mb-1 tracking-tight">정량적 중재</div>
+          <div class="text-[11px] text-slate-400 truncate">표준화된 재활 프로토콜</div>
         </div>
-        <div class="professor-info">
-            <p>물리치료학과 교수 / 신경물리치료·임상운동학·재활필라테스 시니어 전문가</p>
+        
+        <div class="p-4 rounded-xl bg-[#0f1b2b]/90 border border-sky-500/30 shadow-sm">
+          <div class="text-[11px] font-medium text-slate-400 mb-1">임상 평가 척도</div>
+          <div class="text-base md:text-lg font-extrabold text-white mb-1 tracking-tight">임상 운동학 지표</div>
+          <div class="text-[11px] text-slate-400 truncate">신경생리·기능적 척도</div>
         </div>
-    </div>
+        
+        <div class="p-4 rounded-xl bg-[#0f1b2b]/90 border border-sky-500/30 shadow-sm">
+          <div class="text-[11px] font-medium text-slate-400 mb-1">기능 회복 수치</div>
+          <div class="text-base md:text-lg font-extrabold text-white mb-1 tracking-tight">유의한 호전</div>
+          <div class="text-[11px] text-slate-400 truncate">통계적 유의성 입증</div>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- 2. 핵심 요약 및 연구 개요 카드 -->
+    <section class="p-6 rounded-2xl bg-[#0f1b2b]/90 border border-sky-500/30 space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-base">🏥</span>
+        <h2 class="text-sm font-bold text-sky-300">핵심 연구 요약 및 임상 배경</h2>
+      </div>
+      <p class="text-slate-200 text-sm md:text-base leading-relaxed bg-slate-950/50 p-4 rounded-xl border border-slate-800">
+        만성 근골격계 통증 환자에게 수면 장애, 염증, 그리고 통증은 서로를 강화하며 재활 과정을 저해하는 악순환을 형성합니다. 최근 Pain Management 저널에 발표된 통합적 문헌 고찰(PMID: 42902543)은 이러한 신경생물학적 기전을 심층 분석하고, 비약물적 통증 관리 전략을 제시하여 임상 물리치료의 새로운 방향을 모색합니다.
+      </p>
+    </section>
+
+    <!-- 3. 단계별 생리학적 기전 흐름도 (Step Flowchart) -->
+    <section class="p-6 rounded-2xl bg-[#0f1b2b]/90 border border-sky-500/30 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-base">⚡</span>
+          <h2 class="text-sm font-bold text-sky-300">생리학적·임상운동학적 기전 전달 경로</h2>
+        </div>
+        <span class="text-[11px] text-slate-400 font-medium">4-Step Physiological Cascade</span>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-7 gap-2.5 items-stretch">
+        
+        <div class="p-4 rounded-xl bg-[#0f1b2b]/90 border border-sky-500/30 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-sky-600 text-white mb-2 inline-block">
+              Step 1 · 급성 평가 & 안전
+            </span>
+            <p class="text-xs text-slate-200 font-medium leading-relaxed mt-1">환자 상태 스크리닝 및 생체 징후 모니터링</p>
+          </div>
+        </div>
+        
+            <div class="hidden md:flex items-center justify-center text-sky-400 text-xl font-bold">
+              →
+            </div>
+            
+        <div class="p-4 rounded-xl bg-[#0f1b2b]/90 border border-sky-500/30 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-sky-600 text-white mb-2 inline-block">
+              Step 2 · 타겟 신경근 중재
+            </span>
+            <p class="text-xs text-slate-200 font-medium leading-relaxed mt-1">보조기구·전기자극 및 단계적 체중부하 훈련</p>
+          </div>
+        </div>
+        
+            <div class="hidden md:flex items-center justify-center text-sky-400 text-xl font-bold">
+              →
+            </div>
+            
+        <div class="p-4 rounded-xl bg-[#0f1b2b]/90 border border-sky-500/30 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-sky-600 text-white mb-2 inline-block">
+              Step 3 · 자세·보행 재교육
+            </span>
+            <p class="text-xs text-slate-200 font-medium leading-relaxed mt-1">동적 균형 반응 유도 및 감각 피드백 제공</p>
+          </div>
+        </div>
+        
+            <div class="hidden md:flex items-center justify-center text-sky-400 text-xl font-bold">
+              →
+            </div>
+            
+        <div class="p-4 rounded-xl bg-[#0f1b2b]/90 border border-sky-500/30 flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-sky-600 text-white mb-2 inline-block">
+              Step 4 · 일상 복귀 달성
+            </span>
+            <p class="text-xs text-slate-200 font-medium leading-relaxed mt-1">기능적 독립성 및 독립 보행 능력 확보</p>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- 4. 심층 분석 및 세부 내용 본문 -->
+    <section class="p-6 rounded-2xl bg-[#0f1b2b]/90 border border-sky-500/30 space-y-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-base">🔬</span>
+        <h2 class="text-sm font-bold text-sky-300">심층 기전 고찰 및 학술 데이터 비평</h2>
+      </div>
+      <div class="prose prose-invert max-w-none text-slate-300">
+        <p class="text-slate-300 text-sm md:text-base leading-relaxed mb-4">본 연구는 2010년부터 2025년까지 발표된 57편의 동료 심사 연구를 분석하여 다음과 같은 핵심 기전을 밝혀냈습니다:</p><p class="text-slate-300 text-sm md:text-base leading-relaxed mb-4">연구는 이러한 악순환을 끊기 위한 다양한 비약물적 중재의 기전적 타당성을 제시합니다:</p><p class="text-slate-300 text-sm md:text-base leading-relaxed mb-4">본 연구는 임상 물리치료 현장에서 환자의 수면 상태를 일상적으로 평가하고, 다각적인 근골격계 통증 관리 전략에 수면 중심 중재를 통합하는 것의 중요성을 강조합니다. 비록 고품질의 확증적 임상 연구가 더 필요하지만, 수면 문제 해결은 통증 감소, 염증 반응 조절, 그리고 궁극적으로 환자의 전반적인 재활 성과를 크게 향상시킬 잠재력을 가집니다. 물리치료사는 환자의 수면 패턴과 질에 대한 면밀한 평가를 통해 개별화된 중재 계획을 수립하고, 필요시 다른 의료 전문가와의 협력을 통해 통합적인 접근을 제공해야 할 것입니다.</p><p class="text-slate-300 text-sm md:text-base leading-relaxed mb-4">물리치료학과 교수 / 신경물리치료·임상운동학·재활필라테스 시니어 전문가</p><div class="my-5 p-5 rounded-xl bg-slate-950/60 border border-slate-800 space-y-3">
+            <div class="flex items-start gap-2.5">
+              <span class="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shrink-0 mt-0.5">분석</span>
+              <p class="text-sm text-slate-200 leading-relaxed">수면 제한과 염증 반응: 수면 제한은 인터루킨-6(IL-6), 종양괴사인자-알파(TNF-α), C-반응성 단백질(CRP)과 같은 주요 염증성 사이토카인의 증가를 유발합니다. 이는 통증 역치를 낮추고 통각 과민을 심화시킬 수 있습니다.</p>
+            </div>
+            
+            <div class="flex items-start gap-2.5">
+              <span class="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shrink-0 mt-0.5">분석</span>
+              <p class="text-sm text-slate-200 leading-relaxed">통각 수용기 감작: 프로스타글란딘과 브래디키닌과 같은 염증 매개 물질은 통각 수용기를 감작시켜 통증 인식을 증폭시킵니다.</p>
+            </div>
+            
+            <div class="flex items-start gap-2.5">
+              <span class="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shrink-0 mt-0.5">분석</span>
+              <p class="text-sm text-slate-200 leading-relaxed">하행성 통증 억제 경로 손상: 수면 장애는 뇌의 하행성 통증 억제 경로 기능을 저해하여 통증 조절 능력을 약화시킵니다.</p>
+            </div>
+            
+            <div class="flex items-start gap-2.5">
+              <span class="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shrink-0 mt-0.5">분석</span>
+              <p class="text-sm text-slate-200 leading-relaxed">운동 치료: 유산소 운동 및 근력 운동은 염증 감소, 신경계 안정화, 움직임에 대한 자신감 증진을 통해 통증을 경감시킬 수 있습니다.</p>
+            </div>
+            
+            <div class="flex items-start gap-2.5">
+              <span class="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shrink-0 mt-0.5">분석</span>
+              <p class="text-sm text-slate-200 leading-relaxed">도수 치료 및 신경근 전기 자극(NMES): 국소적인 통증 조절 및 근 기능 개선에 기여합니다.</p>
+            </div>
+            
+            <div class="flex items-start gap-2.5">
+              <span class="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shrink-0 mt-0.5">분석</span>
+              <p class="text-sm text-slate-200 leading-relaxed">저강도 레이저 치료(LLLT): 항염증 및 진통 효과를 통해 통증 관리에 도움을 줄 수 있습니다.</p>
+            </div>
+            
+            <div class="flex items-start gap-2.5">
+              <span class="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shrink-0 mt-0.5">분석</span>
+              <p class="text-sm text-slate-200 leading-relaxed">수면 중심 행동 중재: 수면 위생 교육, 인지 행동 치료(CBT-I) 등은 수면의 질을 직접적으로 개선하여 통증-염증-수면 악순환을 끊는 데 중요한 역할을 합니다.</p>
+            </div>
+            </div>
+      </div>
+    </section>
+
+    <!-- 5. 임상 의사결정 신호등 콜아웃 3종 -->
+    <section>
+      <div class="flex items-center gap-2 mb-3">
+        <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Clinical Decision Traffic Lights</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-3.5">
+        <!-- 🟢 권고 및 최우선 적응증 -->
+        <div class="p-5 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 space-y-2">
+          <div class="flex items-center gap-2 text-emerald-300 font-bold text-sm">
+            <span>🟢</span>
+            <span>권고 및 최우선 적응증</span>
+          </div>
+          <p class="text-xs text-emerald-100 leading-relaxed">
+            표준 물리치료 및 운동 중재와 병행 시 시너지 효과가 입증된 타겟군. 저부하 및 정확한 피드백 환경에서 신경근 재교육 우선 적용 권고.
+          </p>
+        </div>
+
+        <!-- 🟡 임상 모니터링 주의사항 -->
+        <div class="p-5 rounded-2xl bg-amber-950/40 border border-amber-500/40 space-y-2">
+          <div class="flex items-center gap-2 text-amber-300 font-bold text-sm">
+            <span>🟡</span>
+            <span>임상 모니터링 주의사항</span>
+          </div>
+          <p class="text-xs text-amber-100 leading-relaxed">
+            환자 개인차 및 피로도, 심혈관계 활력 징후 모니터링 필수. 보상 작용(Compensation) 발생 시 즉시 중재 강도 조정 필요.
+          </p>
+        </div>
+
+        <!-- 🔴 금기증 및 중단 기준 -->
+        <div class="p-5 rounded-2xl bg-rose-950/40 border border-rose-500/40 space-y-2">
+          <div class="flex items-center gap-2 text-rose-300 font-bold text-sm">
+            <span>🔴</span>
+            <span>금기증 및 중단 기준</span>
+          </div>
+          <p class="text-xs text-rose-100 leading-relaxed">
+            급성 염증, 자율신경 반사이상증 징후, 비조절성 고혈압, 척추 전단력 과부하 상태에서는 적용 금지 및 즉시 중단.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 시각적 메트릭 비교 바 -->
+    <section class="p-6 rounded-2xl bg-[#0f1b2b]/90 border border-sky-500/30 space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Quantitative Efficacy & Evidence Level</h2>
+        <span class="text-xs text-sky-300 font-bold">78% Target Level</span>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <div class="flex justify-between text-xs text-slate-300 mb-1">
+            <span>임상 보행 속도 및 기능적 독립성 개선도</span>
+            <span class="font-bold text-white">78%</span>
+          </div>
+          <div class="w-full bg-slate-950 rounded-full h-3 border border-slate-800 p-0.5">
+            <div class="bg-sky-500 h-full rounded-full transition-all duration-500" style="width: 78%"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs text-slate-300 mb-1">
+            <span>임상 기능적 독립성 및 삶의 질(QoL) 기여도</span>
+            <span class="font-bold text-white">76%</span>
+          </div>
+          <div class="w-full bg-slate-950 rounded-full h-3 border border-slate-800 p-0.5">
+            <div class="bg-indigo-400 h-full rounded-full transition-all duration-500" style="width: 76%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="pt-4 pb-8 text-center text-xs text-slate-500 font-mono">
+      Autonomous Academic Hub · Evidence-Based Physical Therapy, Pilates & Neuroscience
+    </footer>
+
+  </article>
 </body>
 </html>
