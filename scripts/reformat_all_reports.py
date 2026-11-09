@@ -412,9 +412,8 @@ def main():
         else:
             existing_html = ""
             
-        # 오늘(2026-11-10) 생성된 신규 4건은 이미 최신 인포그래픽이 적용되어 있으므로 건너뜀
-        if item.get("date") == "2026-11-10":
-            continue
+        # 최신 4건 및 초기 샘플을 포함한 전체 리포트에 일관된 템플릿 적용
+        # (예외 없이 100% 동일한 게시판별 테마 디자인 적용)
             
         # 기존 65건 리포트 내용 구조화 추출 및 테마 렌더링
         content = extract_content(existing_html, item.get("summary", ""))
