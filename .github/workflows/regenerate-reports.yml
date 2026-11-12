@@ -1,0 +1,50 @@
+name: Regenerate Reports (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      max_items:
+        description: '이번 실행에서 다시 만들 최대 리포트 수'
+        required: false
+        default: '100'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: report-writer
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Regenerate reports with current prompt
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MAX_ITEMS: ${{ github.event.inputs.max_items }}
+        run: python3 scripts/regenerate_reports.py
+
+      - name: Commit and Push Updates
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/ manifest.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(briefing): regenerate reports with prompt v2 [$(date +'%Y-%m-%d')]"
+            git pull --rebase origin ${{ github.ref_name }}
+            git push origin ${{ github.ref_name }}
+          else
+            echo "No changes to commit."
+          fi

@@ -7,6 +7,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: report-writer
+  cancel-in-progress: false
+
 jobs:
   generate-daily-briefings:
     runs-on: ubuntu-latest

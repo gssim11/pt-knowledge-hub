@@ -65,6 +65,7 @@ STREAM_CONFIGS = [
 ]
 
 ALLOWED_TAGS = ["#신경가소성", "#고유수용성감각", "#운동제어_운동학습", "#중추감작_통증기전", "#자율신경계", "#비침습뇌자극(tSMS)", "#거울시각피드백(MVF)", "#뇌파_운동심상(EEG-MI)", "#로봇_보행재활", "#코어_분절안정화", "#심폐재활_CPET", "#임상응급_프로토콜", "#RCT저널브리핑"]
+PROMPT_VERSION = 2  # 2026-11-12: 초록 외 내용 금지·한계 명시·실제 수치 막대 규칙
 NOTICE_PATH = Path(__file__).resolve().parent / "ai_notice.html"
 
 def add_notice(html):
@@ -89,7 +90,14 @@ def fetch_pubmed(query, used_pmids):
         pmid = next((i for i in ids if i not in used_pmids), None)
         if not pmid:
             return None
+        return fetch_paper(pmid)
+    except Exception as e:
+        print(f"[PubMed Search Warning] {e}")
+        return None
 
+def fetch_paper(pmid):
+    """PMID 하나의 제목·초록·학술지를 가져온다. 초록이 없으면 None."""
+    try:
         time.sleep(1.5)  # NCBI Fetch 간격 유지
         u2 = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?" + urllib.parse.urlencode({
             "db": "pubmed", "id": pmid, "retmode": "xml"
@@ -114,7 +122,8 @@ def fetch_pubmed(query, used_pmids):
         print(f"[PubMed Fetch Warning] {e}")
         return None
 
-def call_gemini(cfg, paper):
+def call_gemini(cfg, paper, date_str=None):
+    date_str = date_str or TODAY_STR
     prompt = f"""당신은 물리치료학과 교수이자 신경물리치료·임상운동학·재활필라테스 시니어 연구자입니다.
 아래 실제로 검증된 PubMed 학술 논문 초록을 정밀하게 분석하여 '{cfg['stream']}' 영역의 일일 심층 학술 브리핑 리포트를 한국어로 작성하십시오.
 이 리포트는 전문 임상가와 연구자가 한눈에 핵심을 파악할 수 있도록 '{cfg['label']}' 게시판 전용 인포그래픽 카드뉴스 스타일로 작성되어야 합니다.
@@ -140,7 +149,7 @@ def call_gemini(cfg, paper):
    - 헤드에 Tailwind CSS CDN (<script src="https://cdn.tailwindcss.com"></script>) 및 Pretendard 글꼴 스타일을 로드할 것.
    - 전체 배경은 해당 게시판 테마 색상({cfg['bg_color']} text-slate-100)으로 하고, 컨테이너는 max-w-4xl mx-auto p-4 md:p-8 space-y-6 로 구성할 것.
    - [상단 헤더]:
-     - {cfg['icon']} 아이콘과 함께 '{cfg['label']}' 배지({cfg['badge_cls']}), 발행일({TODAY_STR}), PubMed 링크(PMID: {paper['pmid']})를 배치할 것.
+     - {cfg['icon']} 아이콘과 함께 '{cfg['label']}' 배지({cfg['badge_cls']}), 발행일({date_str}), PubMed 링크(PMID: {paper['pmid']})를 배치할 것.
      - 메인 제목은 크고 굵게(text-xl md:text-3xl font-extrabold text-white leading-snug) 작성할 것.
    - [필수 시각화 1: 상단 4대 메트릭스 스탯 카드 그리드]
      <div class="grid grid-cols-2 md:grid-cols-4 gap-3"> 안에 {cfg['card_bg']} border {cfg['border_color']} 스타일의 4개 타일을 배치:
@@ -228,7 +237,8 @@ def main():
                 "summary": out["summary"],
                 "tags": [t for t in out["tags"] if t in ALLOWED_TAGS][:4] or ["#RCT저널브리핑"],
                 "pmid": paper["pmid"],
-                "path": rel
+                "path": rel,
+                "prompt_version": PROMPT_VERSION
             })
             generated_count += 1
             print(f"[{cfg['stream']}] 인포그래픽 브리핑 생성 완료 -> {rel}")
