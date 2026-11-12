@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 신경물리치료·필라테스·뇌과학 무인 일일 학술 브리핑 생성 엔진 (게시판별 특화 인포그래픽 버전)
-매일 아침 07:15 KST GitHub Actions에 의해 자동 실행됩니다.
+매일 07:15 KST(GitHub 예약 실행 특성상 실제로는 몇 시간 늦어질 수 있음) GitHub Actions에 의해 자동 실행됩니다.
 """
 import json, os, urllib.parse, urllib.request, re, time
 import xml.etree.ElementTree as ET
@@ -64,6 +64,17 @@ STREAM_CONFIGS = [
     }
 ]
 
+ALLOWED_TAGS = ["#신경가소성", "#고유수용성감각", "#운동제어_운동학습", "#중추감작_통증기전", "#자율신경계", "#비침습뇌자극(tSMS)", "#거울시각피드백(MVF)", "#뇌파_운동심상(EEG-MI)", "#로봇_보행재활", "#코어_분절안정화", "#심폐재활_CPET", "#임상응급_프로토콜", "#RCT저널브리핑"]
+NOTICE_PATH = Path(__file__).resolve().parent / "ai_notice.html"
+
+def add_notice(html):
+    """모든 리포트 상단에 'AI 요약·원문 확인' 안내를 넣는다(중복 삽입 방지)."""
+    if 'id="ai-notice"' in html or not NOTICE_PATH.exists():
+        return html
+    note = NOTICE_PATH.read_text(encoding="utf-8").strip()
+    new, n = re.subn(r"(<body[^>]*>)", lambda m: m.group(1) + note, html, count=1)
+    return new if n else note + html
+
 def fetch_pubmed(query, used_pmids):
     try:
         time.sleep(1.5)  # NCBI Rate Limit (초당 3회 이하) 준수
@@ -120,6 +131,10 @@ def call_gemini(cfg, paper):
 
 [작성 및 시각화 필수 규칙]
 1. 반드시 제공된 초록의 사실에만 근거하여 작성하고, 확인되지 않은 수치나 기전을 자의적으로 날조하지 마십시오.
+   - 초록에 없는 항목은 지어내지 말고 '초록에 보고되지 않음'이라고 적으십시오. 칸을 채우기 위해 일반론을 연구 결과처럼 쓰지 마십시오.
+   - '유의한', '유의미한', '입증', '검증' 같은 표현은 초록이 통계적 유의성이나 효과를 직접 보고한 경우에만 쓰십시오. 대조군 없는 연구·파일럿·사례·프로토콜 논문은 '기술적 관찰', '가능성 제시', '예비 결과'로 표현하십시오.
+   - 연구 설계의 한계(표본 수, 대조군 유무, 후향적 설계, 제조사 지원·이해상충 등)가 초록에 드러나면 반드시 언급하십시오.
+   - 연구 대상이 물리치료와 직접 관련이 적으면(예: 운동선수 수행능력, 영양제) 그 점을 제목이나 요약에 정직하게 드러내십시오.
 2. 대학원 수준의 엄밀한 학술 용어를 구사하되 평이한 문장으로 서술하고, 숫자와 단위는 LaTeX 수식 없이 '10 Hz', '70% HRR'처럼 일반 텍스트로 표기하십시오.
 3. html_code에는 <!DOCTYPE html>부터 </html>까지 완결된 반응형 HTML 코드를 작성하십시오.
    - 헤드에 Tailwind CSS CDN (<script src="https://cdn.tailwindcss.com"></script>) 및 Pretendard 글꼴 스타일을 로드할 것.
@@ -133,17 +148,19 @@ def call_gemini(cfg, paper):
        (2) 중재 주기 및 용량
        (3) 주요 측정 척도
        (4) 핵심 결과 수치
-   - [필수 시각화 2: 4단계 생리학적 기전 흐름도 (Step Flowchart)]
+   - [필수 시각화 2: 4단계 기전 흐름도 (Step Flowchart)]
      Step 1 → Step 2 → Step 3 → Step 4 형태로 이어지는 프로세스 블록을 구성할 것.
+     초록이 기전을 직접 다루지 않으면 흐름도 제목 옆에 '(초록 외 일반 배경 설명)'이라는 작은 표시를 붙일 것.
    - [필수 시각화 3: 임상 의사결정 신호등 콜아웃 3종]
      <div class="grid md:grid-cols-3 gap-3.5"> 안에:
-       🟢 초록 박스 (bg-emerald-950/40 border border-emerald-500/40 p-5 rounded-2xl): [권고 및 최우선 적응증]
-       🟡 노랑 박스 (bg-amber-950/40 border border-amber-500/40 p-5 rounded-2xl): [임상 모니터링 주의사항]
-       🔴 빨강 박스 (bg-rose-950/40 border border-rose-500/40 p-5 rounded-2xl): [금기증 및 중단 기준]
-   - [필수 시각화 4: 시각적 메트릭 비교 바 (Progress Metric Bar)]
-     주요 임상 지표의 개선율이나 치료 효과 크기를 CSS 바 형태로 최소 2개 이상 시각화할 것.
+       🟢 초록 박스 (bg-emerald-950/40 border border-emerald-500/40 p-5 rounded-2xl): [저자 결론 및 적용 대상] — 초록의 결론과 연구 대상 범위만 적을 것
+       🟡 노랑 박스 (bg-amber-950/40 border border-amber-500/40 p-5 rounded-2xl): [연구의 한계·해석 주의] — 설계·표본·대조군·이해상충 등
+       🔴 빨강 박스 (bg-rose-950/40 border border-rose-500/40 p-5 rounded-2xl): [보고된 이상반응·중단 기준] — 초록이 보고한 내용만. 없으면 '초록에 보고되지 않음 — 일반 금기는 교재·임상 가이드라인을 확인하세요'라고 적을 것
+   - [시각화 4: 초록 수치 비교 바 (Progress Metric Bar)]
+     초록에 실제로 보고된 백분율·비율·점수만 CSS 바로 시각화하고, 바 옆에 그 원래 수치와 단위를 그대로 적을 것(바 폭 = 그 수치).
+     초록에 시각화할 정량 수치가 없으면 바를 만들지 말고 '초록에 비교 가능한 정량 수치가 보고되지 않음'이라는 한 줄만 둘 것. 임의의 퍼센트를 만들지 말 것.
 4. summary는 목록에 표시될 2~3줄의 핵심 요약문(일반 텍스트)을 작성하십시오.
-5. tags에는 ["#신경가소성", "#고유수용성감각", "#운동제어_운동학습", "#중추감작_통증기전", "#자율신경계", "#비침습뇌자극(tSMS)", "#거울시각피드백(MVF)", "#뇌파_운동심상(EEG-MI)", "#로봇_보행재활", "#코어_분절안정화", "#심폐재활_CPET", "#임상응급_프로토콜", "#RCT저널브리핑"] 중 2~4개를 선택하십시오."""
+5. tags에는 아래 목록에 있는 문자열만 그대로 골라 쓰십시오. 목록: ["#신경가소성", "#고유수용성감각", "#운동제어_운동학습", "#중추감작_통증기전", "#자율신경계", "#비침습뇌자극(tSMS)", "#거울시각피드백(MVF)", "#뇌파_운동심상(EEG-MI)", "#로봇_보행재활", "#코어_분절안정화", "#심폐재활_CPET", "#임상응급_프로토콜", "#RCT저널브리핑"] 중 2~4개를 선택하십시오."""
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
     payload = {
@@ -201,7 +218,7 @@ def main():
             f_dir = root / "reports" / cfg["folder"]
             f_dir.mkdir(parents=True, exist_ok=True)
             rel = f"reports/{cfg['folder']}/{rid}.html"
-            (root / rel).write_text(out["html_code"], encoding="utf-8")
+            (root / rel).write_text(add_notice(out["html_code"]), encoding="utf-8")
 
             manifest.insert(0, {
                 "id": rid,
@@ -209,7 +226,7 @@ def main():
                 "date": TODAY_STR,
                 "title": out["title"],
                 "summary": out["summary"],
-                "tags": out["tags"],
+                "tags": [t for t in out["tags"] if t in ALLOWED_TAGS][:4] or ["#RCT저널브리핑"],
                 "pmid": paper["pmid"],
                 "path": rel
             })

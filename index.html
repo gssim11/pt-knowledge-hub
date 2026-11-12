@@ -15,17 +15,17 @@
 <body class="bg-slate-950 text-slate-100 h-screen flex flex-col overflow-hidden">
 
   <!-- 상단 글로벌 헤더 -->
-  <header class="h-16 border-b border-slate-800 bg-slate-900 px-6 flex items-center justify-between shrink-0">
+  <header class="h-16 border-b border-slate-800 bg-slate-900 px-3 sm:px-6 flex items-center justify-between shrink-0">
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-lg text-white shadow-md">PT</div>
       <div>
         <div class="flex items-center gap-2">
-          <h1 class="font-bold text-base text-white tracking-tight">Autonomous Academic Hub</h1>
+          <h1 class="font-bold text-sm sm:text-base text-white tracking-tight">PT 논문 브리핑</h1>
           <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-medium">
             ● 무인 자동 아카이브
           </span>
         </div>
-        <p class="text-xs text-slate-400">매일 아침 07:15 PubMed 최신 연구 기반 Gemini 2.0 Flash 심층 학술 브리핑</p>
+        <p class="hidden sm:block text-xs text-slate-400">매일 오전 PubMed 최신 초록을 Gemini 2.5 Flash가 요약한 AI 학술 브리핑 (참고용)</p>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
         <span id="stat-total-count" class="font-bold text-indigo-400">0</span>건
       </div>
       <a href="https://github.com/gssim11/pt-knowledge-hub" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition flex items-center gap-1.5">
-        <span>GitHub 저장소</span>
+        <span class="hidden sm:inline">GitHub 저장소</span><span class="sm:hidden">GitHub</span>
         <span class="text-[10px] text-slate-400">↗</span>
       </a>
     </div>
@@ -45,7 +45,7 @@
   <!-- 메인 레이아웃 -->
   <div class="flex-1 flex overflow-hidden">
     <!-- 좌측 목록 및 필터 바 -->
-    <aside class="w-full md:w-[420px] border-r border-slate-800 bg-slate-900/60 flex flex-col shrink-0">
+    <aside id="list-pane" class="md:flex w-full md:w-[420px] border-r border-slate-800 bg-slate-900/60 flex flex-col shrink-0">
       <!-- 4대 학술 영역 스트림 탭 -->
       <div class="p-2.5 border-b border-slate-800 grid grid-cols-5 gap-1 bg-slate-900">
         <button onclick="setStream('ALL')" data-stream="ALL" class="stream-btn py-2 rounded text-xs font-semibold bg-indigo-600 text-white transition">
@@ -87,25 +87,29 @@
     </aside>
 
     <!-- 우측 뷰어 본문 -->
-    <main class="flex-1 flex flex-col bg-slate-950 overflow-hidden">
+    <main id="viewer-pane" class="hidden md:flex flex-1 flex-col bg-slate-950 overflow-hidden min-w-0">
       <!-- 뷰어 상단 툴바 -->
-      <div class="h-14 border-b border-slate-800 bg-slate-900/80 px-5 flex items-center justify-between shrink-0">
+      <div class="h-14 border-b border-slate-800 bg-slate-900/80 px-3 md:px-5 flex items-center justify-between gap-2 shrink-0">
         <div class="flex items-center gap-2.5 min-w-0">
-          <span id="view-badge" class="text-[11px] font-bold px-2 py-0.5 rounded border shrink-0">STREAM</span>
+          <button onclick="showList()" class="md:hidden shrink-0 px-2.5 py-1.5 rounded-lg bg-slate-800 text-xs text-slate-200 border border-slate-700">← 목록</button>
+          <span id="view-badge" class="hidden sm:inline text-[11px] font-bold px-2 py-0.5 rounded border shrink-0">STREAM</span>
           <h2 id="view-title" class="font-semibold text-sm text-white truncate">리포트를 선택하세요</h2>
         </div>
 
         <div class="flex items-center gap-2 shrink-0">
           <a id="btn-pubmed-link" href="#" target="_blank" class="hidden px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-indigo-300 border border-slate-700 transition">
-            📄 PubMed 원문 ↗
+            📄 원문<span class="hidden sm:inline"> PubMed</span> ↗
           </a>
           <button onclick="openActiveInNewTab()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white shadow transition">
-            ↗ 새 창에서 열기
+            ↗ 새 창<span class="hidden sm:inline">에서 열기</span>
           </button>
         </div>
       </div>
 
       <!-- 안전 샌드박스 iframe (XSS 및 외부 스크립트 완벽 격리) -->
+      <div class="shrink-0 px-3 md:px-5 py-2 bg-amber-950/60 border-b border-amber-500/30 text-[11px] leading-relaxed text-amber-200">
+        ⚠️ AI(Gemini)가 PubMed <b>초록만</b> 읽고 만든 요약입니다. 기전 흐름도·신호등(적응증·금기)·막대 그래프에는 초록에 없는 일반론이나 임의 수치가 섞일 수 있습니다. 공부·임상 판단에는 반드시 <b>PubMed 원문</b>을 확인하세요.
+      </div>
       <div class="flex-1 bg-white">
         <iframe id="viewer-iframe" class="w-full h-full border-0" sandbox="allow-scripts allow-forms allow-popups"></iframe>
       </div>
@@ -135,7 +139,7 @@
         console.error("manifest.json 로드 실패:", e);
       }
       refreshUI();
-      if (reports.length > 0) selectReport(reports[0].id);
+      if (reports.length > 0) selectReport(reports[0].id, true);
     }
 
     function refreshUI() {
@@ -214,16 +218,30 @@
       });
     }
 
-    function selectReport(id) {
+    const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
+    function showViewer() {
+      if (!isMobile()) return;
+      document.getElementById('list-pane').classList.add('hidden');
+      document.getElementById('viewer-pane').classList.remove('hidden');
+      document.getElementById('viewer-pane').classList.add('flex');
+    }
+    function showList() {
+      document.getElementById('viewer-pane').classList.add('hidden');
+      document.getElementById('viewer-pane').classList.remove('flex');
+      document.getElementById('list-pane').classList.remove('hidden');
+    }
+
+    function selectReport(id, initial) {
       const r = reports.find(x => x.id === id);
       if (!r) return;
+      if (!initial) showViewer();
       activeId = id;
       renderList();
 
       const info = STREAM_INFO[r.stream] || STREAM_INFO.NEURO;
       const badge = document.getElementById('view-badge');
       badge.textContent = info.label;
-      badge.className = `text-[11px] font-bold px-2 py-0.5 rounded border shrink-0 ${info.cls}`;
+      badge.className = `hidden sm:inline text-[11px] font-bold px-2 py-0.5 rounded border shrink-0 ${info.cls}`;
       document.getElementById('view-title').textContent = r.title;
 
       const pubmedBtn = document.getElementById('btn-pubmed-link');
