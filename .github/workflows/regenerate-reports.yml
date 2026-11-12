@@ -1,5 +1,7 @@
 name: Regenerate Reports (manual)
 on:
+  schedule:
+    - cron: '0 4 * * *'   # 매일 13:00 KST, 아침 브리핑 뒤 남은 할당량으로 조금씩 처리
   workflow_dispatch:
     inputs:
       max_items:
@@ -32,7 +34,7 @@ jobs:
       - name: Regenerate reports with current prompt
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          MAX_ITEMS: ${{ github.event.inputs.max_items }}
+          MAX_ITEMS: ${{ github.event.inputs.max_items || '15' }}
         run: python3 scripts/regenerate_reports.py
 
       - name: Commit and Push Updates
